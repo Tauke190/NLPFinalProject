@@ -1,0 +1,9 @@
+{
+  "punct_chars":[
+    "\u3002",
+    "?",
+    "!",
+    "."
+  ],
+  "overwrite":false
+}
