@@ -1,10 +1,79 @@
 import spacy;
 import re
+from sacremoses import MosesTokenizer, MosesDetokenizer
+from nltk.corpus import brown
+import numpy as np
 
 nlp = spacy.load("en_core_web_sm")
 boundary = re.compile('^[0-9]$')
-sentences = []
 nlp.disable_pipes('parser')
+
+predicted_sentences_in_docs = []
+doc_names = brown.fileids()
+
+# Reconstruct natural text
+detokenizer = MosesDetokenizer()
+
+# Gives a list of documents which contains a list of setneces. List[List[str]]
+brown_natural_docs_sents = [
+    [
+        detokenizer.detokenize(
+        ' '.join(sent)\
+            .replace('``', '"')\
+            .replace("''", '"')\
+            .replace('`', "'")\
+            .split()
+        , return_str=True)
+        for sent in brown.sents(doc)
+    ]
+    for doc in doc_names
+]
+
+
+
+def sent_indices_from_list(sents, space_included=False):
+    """
+    Convert a list of sentences into a list of indiceis indicating the setence spans.
+    For example:
+    Non-tokenised text: "A. BB. C."
+    sents: ["A.", "BB.", "C."] -> [3, 7]
+    """
+    indices = []
+    offset = 0
+    for sentence in sents[:-1]:
+        offset += len(sentence)
+        if not space_included:
+            offset += 1
+        indices += [offset]
+    return indices
+
+
+def evaluate_indices(true, pred):
+    """
+    Calculate the Precision, Recall and F1-score. Input is a list of indices of the sentence spans.
+    """
+    true, pred = set(true), set(pred)
+    TP = len(pred.intersection(true))
+    FP = len(pred - true)
+    FN = len(true - pred)
+    
+    return TP, FP, FN
+
+def score(TP, FP, FN):
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
+    f1 = 2*(precision*recall)/(precision+recall) if precision+recall!=0 else 0
+    return precision, recall, f1
+
+
+
+brown_natural_docs = [' '.join(doc) for doc in brown_natural_docs_sents]
+
+# Determine sentence indicies. List[List[int]] ---> Answer_key
+brown_sent_indicies = [sent_indices_from_list([sent for sent in doc]) for doc in brown_natural_docs_sents]
+
+# Store total length of each document
+total_len = [len(' '.join(sent for sent in doc)) for doc in brown_natural_docs_sents]
 
 
 # Boundry as : ! , ; , ?
@@ -127,21 +196,29 @@ def set_abbreviation_boundry(doc):
     return doc
 
 
-nlp.add_pipe("is_abbreviation",before="ner")
+# nlp.add_pipe("is_abbreviation",before="ner")
 # nlp.add_pipe("set_abbreviation_boundry",before="ner")
-nlp.add_pipe("ignore_num_as_sentence_boundry",before='ner')
+# nlp.add_pipe("ignore_num_as_sentence_boundry",before='ner')
+# nlp.add_pipe("is_inside_paranthesis",before='ner')
+# nlp.add_pipe("numbered_list_with_space",before='ner')
 nlp.add_pipe("custom_boundry",before='ner')
-nlp.add_pipe("is_inside_paranthesis",before='ner')
-nlp.add_pipe("numbered_list_with_space",before='ner')
+
+#--------------------------------------------------------------------------------------------------->>
+# This will only test 100 brown docs out of 500
+total_docs_to_test = 100
+
+# Prediction for the brown corpos
+spacy_docs = [nlp(text) for text in brown_natural_docs[:total_docs_to_test]]
+spacy_sents_str = [[sents.text_with_ws for sents in doc.sents] for doc in spacy_docs]
+spacy_sent_indicies = [sent_indices_from_list(doc, space_included=True) for doc in spacy_sents_str]
+
+# Answer key from the brown corpos
+spacy_metrics = np.array([evaluate_indices(brown_sent_indicies[i], spacy_sent_indicies[i])
+                   for i in range(total_docs_to_test)])
 
 
+spacy_metrics_avg = score(*spacy_metrics.sum(axis=0))
+print("Precision: %.3f" % spacy_metrics_avg[0])
+print("Recall: %.3f" % spacy_metrics_avg[1])
+print("F1-score: %.3f" % spacy_metrics_avg[2])
 
-with open('training.txt','r') as myfile:
-    data = myfile.read()
-
-doc = nlp(data)
-
-for sent in doc.sents:
-    sentences.append(sent.text)
-
-print(sentences)
