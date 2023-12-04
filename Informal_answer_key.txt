@@ -1,0 +1,27 @@
+Similarly, algorithms that expect a corpus to follow a set of conventions for a written language are frequently not robust enough to handle a variety of corpora.
+It is notoriously difficult to prescribe rules governing the use of a written language; it is even more difficult to get people to “follow the rules.
+This is in large part due to the nature of written language, in which the conventions are determined by publishing houses and national academies and are arbitrarily subject to change.
+So while punctuation roughly corresponds to the use of suprasegmental features in spoken language, reliance on well-formed sentences delimited by predictable punctuation can be very problematic.
+In many corpora, traditional prescriptive rules are commonly ignored.
+This fact is particularly important to our discussion of both word and sentence segmentation, which to a large degree depend on the regularity of spacing and punctuation.
+Most existing segmentation algorithms for natural languages are both language-specific and corpus-dependent, developed to handle the predictable ambiguities in a well-formed text.
+Depending on the origin and purpose of a text, capitalization and punctuation rules may be followed very closely.
+
+Similarly, algorithms that expect a corpus to follow a set of conventions for a written language are frequently not robust enough to handle a variety of corpora.
+It is notoriously difficult to prescribe rules governing the use of a written language; it is even more difficult to get people to “follow the rules.
+This is in large part due to the nature of written language, in which the conventions are determined by publishing houses and national academies and are arbitrarily subject to change.
+So while punctuation roughly corresponds to the use of suprasegmental features in spoken language, reliance on well-formed sentences delimited by predictable punctuation can be very problematic.
+In many corpora, traditional prescriptive rules are commonly ignored.
+This fact is particularly important to our discussion of both word and sentence segmentation, which to a large degree depend on the regularity of spacing and punctuation.
+Most existing segmentation algorithms for natural languages are both language-specific and corpus-dependent, developed to handle the predictable ambiguities in a well-formed text.
+Depending on the origin and purpose of a text, capitalization and punctuation rules may be followed very closely.
+
+Similarly, algorithms that expect a corpus to follow a set of conventions for a written language are frequently not robust enough to handle a variety of corpora.
+It is notoriously difficult to prescribe rules governing the use of a written language; it is even more difficult to get people to “follow the rules.
+This is in large part due to the nature of written language, in which the conventions are determined by publishing houses and national academies and are arbitrarily subject to change.
+So while punctuation roughly corresponds to the use of suprasegmental features in spoken language, reliance on well-formed sentences delimited by predictable punctuation can be very problematic.
+In many corpora, traditional prescriptive rules are commonly ignored.
+This fact is particularly important to our discussion of both word and sentence segmentation, which to a large degree depend on the regularity of spacing and punctuation.
+Most existing segmentation algorithms for natural languages are both language-specific and corpus-dependent, developed to handle the predictable ambiguities in a well-formed text.
+Depending on the origin and purpose of a text, capitalization and punctuation rules may be followed very closely.
+
